@@ -1,110 +1,93 @@
-import { Request, Response } from 'express';
+// @ts-ignore
+import {delay} from 'roadhog-api-doc';
+import {Request, Response} from 'express';
 
-function getFakeCaptcha(req: Request, res: Response) {
+function getCaptcha(req: Request, res: Response) {
   return res.json('captcha-xxx');
 }
-// 代码中会兼容本地 service mock 以及部署站点的静态数据
-export default {
+
+const proxy = {
   // 支持值为 Object 和 Array
-  'GET /api/currentUser': {
-    name: 'Serati Ma',
-    avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-    userid: '00000001',
-    email: 'antdesign@alipay.com',
-    signature: '海纳百川，有容乃大',
-    title: '交互专家',
-    group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
-    tags: [
-      {
-        key: '0',
-        label: '很有想法的',
-      },
-      {
-        key: '1',
-        label: '专注设计',
-      },
-      {
-        key: '2',
-        label: '辣~',
-      },
-      {
-        key: '3',
-        label: '大长腿',
-      },
-      {
-        key: '4',
-        label: '川妹子',
-      },
-      {
-        key: '5',
-        label: '海纳百川',
-      },
-    ],
-    notifyCount: 12,
-    unreadCount: 11,
-    country: 'China',
-    geographic: {
-      province: {
-        label: '浙江省',
-        key: '330000',
-      },
-      city: {
-        label: '杭州市',
-        key: '330100',
-      },
-    },
-    address: '西湖区工专路 77 号',
-    phone: '0752-268888888',
+  'GET /api/v1/users/current': {
+    code: 0,
+    message: 'success',
+    data: {
+      id: '9acf15a8-8ea8-40e3-a114-dd17cb7b3444',
+      username: 'jerryLewis',
+      mobile: '15882828282',
+      email: 'jerrery520@gmail.com',
+      user_type: 'admin', // 0 普通用户 1 设计师 2 管理员
+      nickname: 'jerryLewis',
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+      status: 'active', // 0 活动的 1 禁用的
+      openid: 'dd17cb7b3444',
+    }
   },
-  // GET POST 可省略
-  'GET /api/users': [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ],
-  'POST /api/login/account': (req: Request, res: Response) => {
-    const { password, userName, type } = req.body;
-    if (password === 'ant.design' && userName === 'admin') {
+
+  'POST /api/v1/login': (req: Request, res: Response) => {
+    const {password, username} = req.body;
+    if (password === 'admin' && username === 'admin') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
+        code: 0, message: 'success', data: {
+          id: '9acf15a8-8ea8-40e3-a114-dd17cb7b3444',
+          username: 'jerryLewis',
+          mobile: '15882828282',
+          email: 'jerrery520@gmail.com',
+          user_type: 'admin', // 0 普通用户 1 设计师 2 管理员
+          nickname: 'jerryLewis',
+          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+          status: 'active', // 0 活动的 1 禁用的
+          openid: 'dd17cb7b3444',
+        }
       });
       return;
     }
-    if (password === 'ant.design' && userName === 'user') {
+    if (password === 'designer' && username === 'designer') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user',
+        code: 0, message: 'success', data: {
+          id: '9acf15a8-8ea8-40e3-a114-dd17cb7b3444',
+          username: 'jerryLewis',
+          mobile: '15882828282',
+          email: 'jerrery520@gmail.com',
+          user_type: 'designer', // 0 普通用户 1 设计师 2 管理员
+          nickname: 'jerryLewis',
+          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+          status: 'active', // 0 活动的 1 禁用的
+          openid: 'dd17cb7b3444',
+        }
       });
       return;
     }
     res.send({
-      status: 'error',
-      type,
-      currentAuthority: 'guest',
+      code: 0, message: 'success', data: {
+        id: '9acf15a8-8ea8-40e3-a114-dd17cb7b3444',
+        username: 'jerryLewis',
+        mobile: '15882828282',
+        email: 'jerrery520@gmail.com',
+        user_type: 'user', // 0 普通用户 1 设计师 2 管理员
+        nickname: 'jerryLewis',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        status: 'active', // 0 活动的 1 禁用的
+        openid: 'dd17cb7b3444',
+      }
     });
   },
-  'POST /api/register': (req: Request, res: Response) => {
-    res.send({ status: 'ok', currentAuthority: 'user' });
+  'POST /api/v1/register': (req: Request, res: Response) => {
+    res.send({
+      code: 0, message: 'success', data: {
+        id: '9acf15a8-8ea8-40e3-a114-dd17cb7b3444',
+        username: 'jerryLewis',
+        mobile: '15882828282',
+        email: 'jerrery520@gmail.com',
+        user_type: 0, // 0 普通用户 1 设计师 2 管理员
+        nickname: 'jerryLewis',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        status: 'active', // 0 活动的 1 禁用的
+        openid: 'dd17cb7b3444',
+      }
+    });
   },
-  'GET /api/500': (req: Request, res: Response) => {
+  'GET /api/v1/500': (req: Request, res: Response) => {
     res.status(500).send({
       timestamp: 1513932555104,
       status: 500,
@@ -113,7 +96,7 @@ export default {
       path: '/base/category/list',
     });
   },
-  'GET /api/404': (req: Request, res: Response) => {
+  'GET /api/v1/404': (req: Request, res: Response) => {
     res.status(404).send({
       timestamp: 1513932643431,
       status: 404,
@@ -122,7 +105,7 @@ export default {
       path: '/base/category/list/2121212',
     });
   },
-  'GET /api/403': (req: Request, res: Response) => {
+  'GET /api/v1/403': (req: Request, res: Response) => {
     res.status(403).send({
       timestamp: 1513932555104,
       status: 403,
@@ -131,7 +114,7 @@ export default {
       path: '/base/category/list',
     });
   },
-  'GET /api/401': (req: Request, res: Response) => {
+  'GET /api/v1/401': (req: Request, res: Response) => {
     res.status(401).send({
       timestamp: 1513932555104,
       status: 401,
@@ -141,5 +124,8 @@ export default {
     });
   },
 
-  'GET  /api/login/captcha': getFakeCaptcha,
+  'GET  /api/v1/captcha': getCaptcha,
 };
+
+// 代码中会兼容本地 service mock 以及部署站点的静态数据
+export default delay(proxy, 1000)

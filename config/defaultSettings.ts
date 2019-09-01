@@ -39,12 +39,29 @@ export interface DefaultSettings {
   iconfontUrl: string;
   colorWeak: boolean;
 }
+// initialize default configuration
+// export default {
+//   navTheme: 'dark',
+//   primaryColor: '#1890FF',
+//   layout: 'sidemenu',
+//   contentWidth: 'Fluid',
+//   fixedHeader: false,
+//   autoHideHeader: false,
+//   fixSiderbar: false,
+//   colorWeak: false,
+//   menu: {
+//     locale: true,
+//   },
+//   title: 'XPowerDesign',
+//   pwa: false,
+//   iconfontUrl: '',
+// } as DefaultSettings;
 
 export default {
-  navTheme: 'dark',
-  primaryColor: '#1890FF',
-  layout: 'sidemenu',
-  contentWidth: 'Fluid',
+  navTheme: 'light',
+  primaryColor: '#722ED1',
+  layout: 'topmenu',
+  contentWidth: 'Fixed',
   fixedHeader: false,
   autoHideHeader: false,
   fixSiderbar: false,

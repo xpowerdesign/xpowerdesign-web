@@ -3,14 +3,19 @@ import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
 
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { userLogin, getCaptcha } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
+export enum RESPONSE_CODE {
+  SUCCESS = 0,
+  ERROR = 1,
+}
+
 export interface StateType {
-  status?: 'ok' | 'error';
+  code?: 0 | 1;
   type?: string;
-  currentAuthority?: 'user' | 'guest' | 'admin';
+  message?: string;
 }
 
 export interface LoginModelType {
@@ -30,18 +35,19 @@ const Model: LoginModelType = {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    code: undefined,
   },
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(userLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
+      debugger
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.code === RESPONSE_CODE.SUCCESS) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -62,7 +68,7 @@ const Model: LoginModelType = {
     },
 
     *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
+      yield call(getCaptcha, payload);
     },
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
@@ -82,11 +88,10 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      setAuthority(payload.data.user_type);
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        code: payload.code,
       };
     },
   },

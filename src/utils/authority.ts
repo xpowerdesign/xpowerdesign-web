@@ -1,8 +1,8 @@
 // use localStorage to store the authority info, which might be sent from server in actual project.
 export function getAuthority(str?: string): string | string[] {
-  // return localStorage.getItem('antd-pro-authority') || ['admin', 'user'];
+  // return localStorage.getItem('xpowerdesign-authority') || ['admin', 'user'];
   const authorityString =
-    typeof str === 'undefined' ? localStorage.getItem('antd-pro-authority') : str;
+    typeof str === 'undefined' ? localStorage.getItem('xpowerdesign-authority') : str;
   // authorityString could be admin, "admin", ["admin"]
   let authority;
   try {
@@ -25,5 +25,5 @@ export function getAuthority(str?: string): string | string[] {
 
 export function setAuthority(authority: string | string[]): void {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  return localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority));
+  return localStorage.setItem('xpowerdesign-authority', JSON.stringify(proAuthority));
 }

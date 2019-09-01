@@ -6,6 +6,8 @@ import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
 
 export default {
+  'layout.website_title': 'XPowerDesign',
+  'layout.website_description': '自由设计者',
   'navBar.lang': '语言',
   'layout.user.link.help': '帮助',
   'layout.user.link.privacy': '隐私',
