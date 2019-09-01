@@ -1,0 +1,29 @@
+# MacOs
+.DS_Store
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Build output
+dist/
+dist-storybook/
+coverage-reports/
+test-report.xml
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+
+# IDEA
+.idea
