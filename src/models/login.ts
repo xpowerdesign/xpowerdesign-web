@@ -45,7 +45,6 @@ const Model: LoginModelType = {
         type: 'changeLoginStatus',
         payload: response,
       });
-      debugger
       // Login successfully
       if (response.code === RESPONSE_CODE.SUCCESS) {
         const urlParams = new URL(window.location.href);
