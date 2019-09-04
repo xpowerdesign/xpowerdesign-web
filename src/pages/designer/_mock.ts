@@ -110,7 +110,7 @@ function getFakeList(req: Request, res: Response) {
   const result = fakeList(count);
   return res.json(result);
 }
-
+// TODO: when finish the project move the common mock
 export default {
   'GET  /api/fake_list': getFakeList,
   // 支持值为 Object 和 Array

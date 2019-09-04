@@ -29,15 +29,24 @@ ol {
   list-style: none;
 }
 
+div.ant-list-sm {
+  li.ant-list-item {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
 @media (max-width: @screen-xs) {
   .ant-table {
     width: 100%;
     overflow-x: auto;
+
     &-thead > tr,
     &-tbody > tr {
       > th,
       > td {
         white-space: pre;
+
         > span {
           display: block;
         }

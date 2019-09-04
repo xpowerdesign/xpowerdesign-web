@@ -11,6 +11,7 @@ import Projects from './components/Projects';
 import { CurrentUser } from '@/models/user';
 import styles from './Center.less';
 import { ConnectState } from '@/models/connect';
+import SelectMeasure from '@/pages/designer/components/SelectMeasure';
 
 const operationTabList = [
   {
@@ -29,7 +30,8 @@ interface DesignerProps extends RouteChildrenProps {
 }
 
 interface DesignerState {
-  tabKey: 'projects';
+  tabKey: string;
+  modalVisible: boolean;
 }
 
 @connect(({ user }: ConnectState) => ({
@@ -38,6 +40,7 @@ interface DesignerState {
 class Designer extends PureComponent<DesignerProps, DesignerState> {
   state: DesignerState = {
     tabKey: 'projects',
+    modalVisible: false,
   };
 
   public input: Input | null | undefined = undefined;
@@ -46,6 +49,9 @@ class Designer extends PureComponent<DesignerProps, DesignerState> {
     const { dispatch } = this.props;
     dispatch({
       type: 'designer/fetch',
+    });
+    dispatch({
+      type: 'category/fetchCategoriesByGroup',
     });
   }
 
@@ -62,8 +68,18 @@ class Designer extends PureComponent<DesignerProps, DesignerState> {
     return null;
   };
 
+  handleModalVisible = (flag?: boolean) => {
+    this.setState({
+      modalVisible: !!flag,
+    });
+  };
+
   render() {
-    const { tabKey } = this.state;
+    const { tabKey, modalVisible } = this.state;
+    const parentMethods = {
+      handleModalVisible: this.handleModalVisible,
+    };
+
     const { currentUser } = this.props;
     const dataLoading = !(currentUser && Object.keys(currentUser).length);
     return (
@@ -78,7 +94,11 @@ class Designer extends PureComponent<DesignerProps, DesignerState> {
                     <div className={styles.name}>{currentUser.username}</div>
                   </div>
                   <div className={styles.newProject}>
-                    <Button type="primary" size="large">
+                    <Button
+                      type="primary"
+                      size="large"
+                      onClick={() => this.handleModalVisible(true)}
+                    >
                       {formatMessage({ id: 'designer.new-project' })}
                     </Button>
                   </div>
@@ -98,6 +118,7 @@ class Designer extends PureComponent<DesignerProps, DesignerState> {
             </Card>
           </Col>
         </Row>
+        <SelectMeasure modalVisible={modalVisible} {...parentMethods} />
       </GridContent>
     );
   }

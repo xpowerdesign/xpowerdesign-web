@@ -3,6 +3,8 @@ import { EffectsCommandMap } from 'dva';
 import { ListItemDataType } from './data.d';
 import { queryFakeList } from './service';
 
+// TODO: when finish the project move the common model
+
 export interface ModalState {
   list: ListItemDataType[];
 }

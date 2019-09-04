@@ -1,3 +1,4 @@
+// TODO: when finish the project move the common d.ts
 export interface Member {
   avatar: string;
   name: string;
