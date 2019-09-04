@@ -10,8 +10,19 @@
   line-height: @layout-header-height;
   vertical-align: top;
   cursor: pointer;
+
+  h1 {
+    display: inline-block;
+    color: white;
+    margin: 0 0 0 12px;
+    font-weight: 400;
+    font-size: 16px;
+    vertical-align: middle;
+  }
+
   img {
     display: inline-block;
+    height: 32px;
     vertical-align: middle;
   }
 }
@@ -20,6 +31,7 @@
   :global(.anticon) {
     margin-right: 8px;
   }
+
   :global(.ant-dropdown-menu-item) {
     min-width: 160px;
   }
@@ -31,6 +43,7 @@
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s, padding 0s;
+
   &:hover {
     background: @pro-header-hover-bg;
   }
@@ -40,29 +53,36 @@
   float: right;
   height: 100%;
   overflow: hidden;
+
   .action {
     display: inline-block;
     height: 100%;
     padding: 0 12px;
     cursor: pointer;
     transition: all 0.3s;
+
     > i {
       color: @text-color;
       vertical-align: middle;
     }
+
     &:hover {
       background: @pro-header-hover-bg;
     }
+
     &:global(.opened) {
       background: @pro-header-hover-bg;
     }
   }
+
   .search {
     padding: 0 12px;
+
     &:hover {
       background: transparent;
     }
   }
+
   .account {
     .avatar {
       margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
@@ -76,15 +96,19 @@
 
 .dark {
   height: @layout-header-height;
+
   .action {
     color: rgba(255, 255, 255, 0.85);
+
     > i {
       color: rgba(255, 255, 255, 0.85);
     }
+
     &:hover,
     &:global(.opened) {
       background: @primary-color;
     }
+
     :global(.ant-badge) {
       color: rgba(255, 255, 255, 0.85);
     }
@@ -95,22 +119,27 @@
   :global(.ant-divider-vertical) {
     vertical-align: unset;
   }
+
   .name {
     display: none;
   }
+
   i.trigger {
     padding: 22px 12px;
   }
+
   .logo {
     position: relative;
     padding-right: 12px;
     padding-left: 12px;
   }
+
   .right {
     position: absolute;
     top: 0;
     right: 12px;
     background: #fff;
+
     .account {
       .avatar {
         margin-right: 0;

@@ -99,6 +99,19 @@ export default {
       component: '../layouts/SecurityLayout',
       routes: [
         {
+          path: '/editor',
+          component: '../layouts/EditorLayout',
+          routes: [
+            {
+              name: 'editor',
+              path: '/editor',
+              component: './editor',
+              icon: 'home',
+              hideInMenu: true,
+            },
+          ],
+        },
+        {
           path: '/',
           component: '../layouts/BasicLayout',
           authority: ['admin', 'designer', 'user'],
@@ -112,11 +125,14 @@ export default {
               name: 'welcome',
               icon: 'smile',
               component: './Welcome',
+              hideInBreadcrumb: true,
             },
             {
               name: 'designer',
               path: '/designer',
+              icon: 'home',
               component: './designer',
+              hideInBreadcrumb: true,
             },
             {
               component: './404',
@@ -152,7 +168,7 @@ export default {
         resourcePath: string;
       },
       _: string,
-      localName: string
+      localName: string,
     ) => {
       if (
         context.resourcePath.includes('node_modules') ||
