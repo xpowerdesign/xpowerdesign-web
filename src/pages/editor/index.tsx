@@ -50,29 +50,29 @@ const Editor: React.FC<EditorProps> = ({settings}) => {
         <Menu
           theme={settings.navTheme}
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={['sticker']}
           style={{height: '100%', borderRight: 0}}
         >
-          <Menu.Item key="1">
+          <Menu.Item key="sticker">
             <Icon type="sketch"/>
             {formatMessage({id: "menu.sticker"})}
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key="text">
             <Icon type="file-word"/>
             {formatMessage({id: "menu.text"})}
           </Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="background">
             <Icon type="mail"/>
             {formatMessage({id: "menu.background"})}
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="photo">
             <Icon type="ant-cloud"/>
             {formatMessage({id: "menu.photo"})}
           </Menu.Item>
         </Menu>
       </Sider>
 
-      <Sider width={100} style={{background: '#f0f2f5'}}>
+      <Sider width={356} style={{background: '#f0f2f5'}}>
 
       </Sider>
 
