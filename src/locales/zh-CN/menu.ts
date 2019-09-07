@@ -47,5 +47,10 @@ export default {
   'menu.editor.flow': '流程编辑器',
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
+
   'menu.designer': '设计师',
+  'menu.background': '背景',
+  'menu.text': '文字',
+  'menu.sticker': '贴纸',
+  'menu.photo': '相册',
 };

@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
-import ProLayout, { BasicLayoutProps as ProLayoutProps, Settings } from '@ant-design/pro-layout';
-import { Dispatch } from 'redux';
-import { connect } from 'dva';
-import { ConnectState } from '@/models/connect';
-import EditorHeader from '@/components/EditorHeader';
-import { formatMessage } from 'umi-plugin-react/locale';
+import React, {useEffect} from 'react';
+import {connect} from 'dva';
+import {ConnectState} from '@/models/connect';
+import {Layout} from 'antd';
+import RightContent from '@/components/GlobalHeader/RightContent';
+import TopNavHeader from "@ant-design/pro-layout/lib/TopNavHeader";
+import logo from '../assets/logo-blue.svg';
+import editorStyles from './EditorLayout.less';
+import Editor from '@/pages/editor/index';
+import {Dispatch} from "redux";
 
-export interface EditorLayoutProps extends ProLayoutProps {
+import {Settings} from '@ant-design/pro-layout';
+
+export interface EditorLayoutProps {
   settings: Settings;
   dispatch: Dispatch;
 }
 
-const footerRender = () => '';
-
 const EditorLayout: React.FC<EditorLayoutProps> = props => {
-  const { dispatch, children, settings } = props;
+  const {dispatch, settings} = props;
   settings.navTheme = 'dark';
 
   useEffect(() => {
@@ -28,19 +31,20 @@ const EditorLayout: React.FC<EditorLayoutProps> = props => {
     }
   }, []);
   return (
-    <ProLayout
-      headerRender={EditorHeader}
-      footerRender={footerRender}
-      formatMessage={formatMessage}
-      menuRender={false}
-      {...settings}
-      {...props}
-    >
-      {children}
-    </ProLayout>
+    <Layout>
+      <header className={editorStyles.dark}>
+        <TopNavHeader
+          logo={logo} title={settings.title}
+          rightContentRender={rightProps => <RightContent {...rightProps} />}
+        >
+        </TopNavHeader>
+      </header>
+
+      <Editor settings={settings}/>
+    </Layout>
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({
+export default connect(({settings}: ConnectState) => ({
   settings,
 }))(EditorLayout);
