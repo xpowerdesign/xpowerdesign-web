@@ -1,19 +1,18 @@
-# Ant Design Pro
+# XPowerDesign
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+For designer, build more beautiful poster
 
-## Environment Prepare
+## Editor
+#### Tech
 
-Install `node_modules`:
+* fabric  canvas库 
+* interact 支持元素惯性拖放和多点触摸手势的js插件
+* anime 是一个轻量的JavaScript 动画库， 拥有简单而强大的API  https://www.animejs.cn/
+
+## Usage
 
 ```bash
 npm install
-```
-
-or
-
-```bash
-yarn
 ```
 
 ## Provided Scripts
@@ -52,6 +51,3 @@ npm run lint:fix
 npm test
 ```
 
-## More
-
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).

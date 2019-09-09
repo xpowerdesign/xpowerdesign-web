@@ -55,9 +55,13 @@
   "dependencies": {
     "@ant-design/pro-layout": "^4.5.9",
     "@antv/data-set": "^0.10.2",
+    "@types/fabric": "^3.0.1",
+    "anime": "^0.1.2",
     "antd": "^3.23.1",
     "classnames": "^2.2.6",
     "dva": "^2.4.1",
+    "fabric": "^3.4.0",
+    "interact": "0.0.3",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "numeral": "^2.0.6",

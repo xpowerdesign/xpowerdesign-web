@@ -109,25 +109,6 @@ export default {
               icon: 'sketch',
               hideInMenu: true
             },
-            {
-              name: 'sticker',
-              path: 'sticker',
-              component: './editor/components/toolbar/sticker',
-              icon: 'sketch',
-            },
-            {
-              name: 'text',
-              path: 'text',
-              icon: 'file-word',
-              component: './editor/components/toolbar/text',
-            },
-            {
-              name: 'background',
-              path: 'background',
-              icon: 'appstore',
-              component: './editor/components/toolbar/background',
-            },
-
           ],
         },
         {
