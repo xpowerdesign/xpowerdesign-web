@@ -6,8 +6,8 @@ import {Button, Modal, Form, Col, Row, Input} from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 import Icon from './Icon';
-import '@/assets/fonts/fontawesome-5.2.0/css/all.css'
-import icons from '@/assets/fonts/fontawesome-5.2.0/metadata/icons.json';
+import '../../../../../public/fonts/fontawesome-5.2.0/css/all.css';
+import icons from '../../../../../public/fonts/fontawesome-5.2.0/metadata/icons.json';
 
 class IconChooser extends Component {
   handlers = {

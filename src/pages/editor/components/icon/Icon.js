@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import '../../../../../public/fonts/fontawesome-5.2.0/css/all.css';
+
 class Icon extends Component {
   static propTypes = {
     name: PropTypes.string,
@@ -28,6 +30,7 @@ class Icon extends Component {
     prefix: 'fas',
   };
 
+
   getIconHtml = (prefix, name, className, size, color) => {
     const iconClassName = `${prefix} fa-${name} ${className}`;
     const iconStyle = Object.assign({}, this.props.style, {
@@ -35,7 +38,7 @@ class Icon extends Component {
       color,
     });
     return (<i className={iconClassName} style={iconStyle} onClick={this.props.onClick}/>);
-  }
+  };
 
   render() {
     const {color, size, className, innerIcon, innerColor, innerSize, innerClassName, prefix} = this.props;

@@ -14,8 +14,8 @@ import ImageMapPreview from './ImageMapPreview';
 import ImageMapConfigurations from './ImageMapConfigurations';
 import SandBox from '../sandbox/SandBox';
 
-import '@/assets/fonts/fontawesome-5.2.0/css/all.css'
-import '@/assets/styles/index.less';
+import '../../../../../public/styles/index.less';
+
 import Container from '../common/Container';
 import CommonButton from '../common/CommonButton';
 
@@ -151,7 +151,7 @@ class ImageMapEditor extends Component {
             this.canvasRef.animationHandlers.initAnimation(obj, true);
           }
         });
-        console.log(target);
+        // console.log(target);
         this.setState({
           selectedItem: target,
         });

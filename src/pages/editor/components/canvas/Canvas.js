@@ -12,8 +12,8 @@ import CurvedLink from '../workflow/link/CurvedLink';
 import Arrow from './Arrow';
 import {ImageHandler} from './handlers';
 
-import '@/assets/styles/core/tooltip.less'
-import '@/assets/styles/core/contextmenu.less'
+import '../../../../../public/styles/core/tooltip.less'
+import '../../../../../public/styles/core/contextmenu.less'
 import anime from "animejs";
 
 
