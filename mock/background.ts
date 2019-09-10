@@ -11,7 +11,8 @@ const proxy = {
           id: '9e56a59d-336f-4beb-9112-7af9226d1a81',
           name: 'red',
           name_chn: '红色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#c20501"
           },
@@ -23,7 +24,8 @@ const proxy = {
           id: '9e56a59d-336f-4beb-9112-7af9226d1a11',
           name: 'light-red',
           name_chn: '亮红色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#fe0a00"
           },
@@ -35,7 +37,8 @@ const proxy = {
           id: '9e56a59d-336f-4beb-9212-7af9226d1a11',
           name: 'yellow',
           name_chn: '黄色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#fec200"
           },
@@ -47,7 +50,8 @@ const proxy = {
           id: '9e56a591-336f-4beb-9212-7af9226d1a11',
           name: 'light-yellow',
           name_chn: '亮黄色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#ffff00"
           },
@@ -59,7 +63,8 @@ const proxy = {
           id: '9e56a53d-336f-4beb-9212-7af9226d1a11',
           name: 'green',
           name_chn: '绿色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#90d23d"
           },
@@ -71,7 +76,8 @@ const proxy = {
           id: '9e56a53d-336f-4b1b-9212-7af9226d1a11',
           name: 'light-green',
           name_chn: '绿色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#00af46"
           },
@@ -83,7 +89,8 @@ const proxy = {
           id: '9e56a53d-336f-4b1b-9212-7af9221d1a11',
           name: 'blue',
           name_chn: '蓝色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#00b0f6"
           },
@@ -95,7 +102,8 @@ const proxy = {
           id: '9e56a53d-336f-4b1b-9212-7af9221d1a11',
           name: 'light-blue',
           name_chn: '亮蓝色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#0170c2"
           },
@@ -107,7 +115,8 @@ const proxy = {
           id: '9e56a53d-331f-4b1b-9212-7af9221d1a11',
           name: 'dark-blue',
           name_chn: '深蓝色',
-          type: 'color',
+          sub_type: 'color',
+          type: 'background',
           resources_meta: {
             value: "#002164"
           },
@@ -119,7 +128,8 @@ const proxy = {
           id: '9e56a53d-336f-4b1b-9212-7af9221d1a11',
           name: 'jacinth',
           name_chn: '亮蓝色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#9a3291"
           },
@@ -131,7 +141,8 @@ const proxy = {
           id: '9e56a53d-336f-411b-9212-7af9221d1a11',
           name: 'black',
           name_chn: '黑色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#000000"
           },
@@ -143,7 +154,8 @@ const proxy = {
           id: '9e56a53d-336f-411b-9211-71f9221d1a11',
           name: 'grey',
           name_chn: '灰色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#666666"
           },
@@ -155,7 +167,8 @@ const proxy = {
           id: '9e56a53d-336f-411b-9211-71f9221d1a11',
           name: 'grey-white',
           name_chn: '灰白色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#dddddd"
           },
@@ -167,7 +180,8 @@ const proxy = {
           id: '9e56a53d-336f-411b-9211-71f9221d1a11',
           name: 'white',
           name_chn: '白色',
-          type: 'color',
+          type: 'background',
+          sub_type: 'color',
           resources_meta: {
             value: "#ffffff"
           },
@@ -181,14 +195,14 @@ const proxy = {
           id: '9e561153d-336f-411b-9211-71f9221d1a11',
           name: 'grey',
           name_chn: '灰色',
-          type: 'image',
+          type: 'background',
+          sub_type: 'image',
           resource_url: 'http://scdn.58share.com/grey.jpg',
           thumbnail_url: 'http://scdn.58share.com/grey.jpg?imageView2/1/w/100/h/100/format/jpg/q/75|imageslim',
           resources_meta: {
             width: 2000,
             height: 2000,
             image_type: 'extend',
-
           },
           sort: 100,
           created_at: '2019-09-02T22:12:11.186+0800',
@@ -198,7 +212,8 @@ const proxy = {
           id: '9e561153d-336f-411b-9211-71f9221d4a11',
           name: 'grey',
           name_chn: '灰色',
-          type: 'image',
+          type: 'background',
+          sub_type: 'image',
           resource_url: 'http://scdn.58share.com/grey.jpg',
           thumbnail_url: 'http://scdn.58share.com/grey.jpg?imageView2/1/w/100/h/100/format/jpg/q/75|imageslim',
           resources_meta: {

@@ -22,7 +22,7 @@ class ImageMapItems extends Component {
   static propTypes = {
     canvasRef: PropTypes.any,
     descriptors: PropTypes.object,
-  }
+  };
 
   state = {
     activeKey: [],
@@ -31,7 +31,7 @@ class ImageMapItems extends Component {
     descriptors: {},
     filteredDescriptors: [],
     svgModalVisible: false,
-  }
+  };
 
   componentDidMount() {
     const {canvasRef} = this.props;

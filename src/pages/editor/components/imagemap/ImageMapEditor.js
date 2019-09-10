@@ -95,7 +95,7 @@ class ImageMapEditor extends Component {
     dataSources: [],
     editing: false,
     descriptors: {},
-  }
+  };
 
   componentDidMount() {
     this.showLoading(true);
