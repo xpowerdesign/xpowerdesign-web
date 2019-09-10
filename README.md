@@ -8,6 +8,9 @@ For designer, build more beautiful poster
 * fabric  canvas库 
 * interact 支持元素惯性拖放和多点触摸手势的js插件
 * anime 是一个轻量的JavaScript 动画库， 拥有简单而强大的API  https://www.animejs.cn/
+* css-element-queries 
+* react-color 
+* react-custom-scrollbars
 
 ## Usage
 

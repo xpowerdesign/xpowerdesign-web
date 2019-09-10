@@ -1,13 +1,13 @@
 import {fabric} from 'fabric';
-// 基于fabric线绘制的箭头
+
 const Arrow = fabric.util.createClass(fabric.Line, {
   type: 'arrow',
   superType: 'drawing',
-  initialize(points: any, options: any) {
+  initialize(points, options) {
     options = options || {};
     this.callSuper('initialize', points, options);
   },
-  _render(ctx: any) {
+  _render(ctx) {
     this.callSuper('_render', ctx);
     ctx.save();
     const xDiff = this.x2 - this.x1;
@@ -27,8 +27,8 @@ const Arrow = fabric.util.createClass(fabric.Line, {
   },
 });
 
-Arrow.fromObject = (options: any, callback: any) => {
+Arrow.fromObject = function (options, callback) {
   return callback(new Arrow(options));
-}
+};
 
 export default Arrow;

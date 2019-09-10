@@ -4,7 +4,8 @@ import menu from './zh-CN/menu';
 import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
-import desinger from './zh-CN/designer';
+import editor from "@/locales/zh-CN/editor";
+import designer from "@/locales/zh-CN/designer";
 
 export default {
   'layout.website_title': 'XPowerDesign',
@@ -22,5 +23,6 @@ export default {
   ...settings,
   ...pwa,
   ...component,
-  ...desinger,
+  ...designer,
+  ...editor
 };

@@ -2,9 +2,7 @@ import {fabric} from 'fabric';
 
 import Arrow from './Arrow';
 
-// canvas绘图对象元素
-
-export default (mergedObjects: any, defaultOptions: any) => {
+export default (mergedObjects, defaultOptions) => {
   const fabricObjects = {
     group: {
       create: ({objects, ...option}) => new fabric.Group(objects, {
