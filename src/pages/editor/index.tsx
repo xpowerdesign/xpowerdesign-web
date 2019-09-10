@@ -45,7 +45,7 @@ const Editor: React.FC<EditorProps> = ({settings}) => {
 
       </Sider>
 
-      <Layout>
+      <Layout className={styles.rightContent}>
         <GridContent>
           <Card bordered={false}>
             <ImageMapEditor  />

@@ -2,11 +2,11 @@
 import {delay} from 'roadhog-api-doc';
 
 const proxy = {
-  'GET /api/v1/assets/stickers/official': {
+  'GET /api/v1/assets/stickers': {
     code: 0,
     message: 'success',
     data: {
-      stickers: [
+      list: [
         // 基础形状
         {
           id: '9e56a59d-336f-4beb-9312-7af9226d1a81',
