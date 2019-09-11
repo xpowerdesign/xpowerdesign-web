@@ -49,7 +49,7 @@ class ImageMapPreview extends Component {
       <div className={previewClassName}>
         <div ref={(c) => {
           this.container = c;
-        }} style={{overvlow: 'hidden', display: 'flex', flex: '1', height: '100%'}}>
+        }} style={{overvlow: 'hidden', display: 'flex', flex: '1', height: '100%', width: '100vw'}}>
           <Canvas
             ref={(c) => {
               this.canvasRef = c;
