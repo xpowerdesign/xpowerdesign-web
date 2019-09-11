@@ -7,11 +7,21 @@ import { formatMessage } from 'umi-plugin-react/locale';
 
 import Canvas from '../canvas/Canvas';
 import ImageMapFooterToolbar from './ImageMapFooterToolbar';
+
+// 左边元素页面
 import ImageMapItems from './ImageMapItems';
+
+// 顶部工具页：需要重构为根据选择的元素动态变化: ImageMapTitle 与 ImageHeaderToolbar 一起合并
 import ImageMapTitle from './ImageMapTitle';
 import ImageMapHeaderToolbar from './ImageMapHeaderToolbar';
+
+// 预览页面：重构为查看全屏页面
 import ImageMapPreview from './ImageMapPreview';
+
+// 右侧配置页面，重构为导入图片等功能
 import ImageMapConfigurations from './ImageMapConfigurations';
+
+
 import SandBox from '../sandbox/SandBox';
 
 import '../../../../../public/styles/index.less';
@@ -445,16 +455,20 @@ class ImageMapEditor extends Component {
         preview: typeof checked === 'object' ? false : checked,
       }, () => {
         if (this.state.preview) {
+          // 导出json数据，判断ID是否为空
           const data = this.canvasRef.handlers.exportJSON().objects.filter((obj) => {
             if (!obj.id) {
               return false;
             }
             return true;
           });
+          // 在preview的canvas中导入JSON数据
           this.preview.canvasRef.handlers.importJSON(data);
+          // 退出快捷键
           this.shortcutHandlers.esc();
           return;
         }
+        // 清除preview canvas中操作
         this.preview.canvasRef.handlers.clear();
       });
     },
