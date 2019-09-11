@@ -85,10 +85,10 @@ class ImageMapEditor extends Component {
     zoomRatio: 1,
     canvasRect: {
       width: 300,
-      height: 150,
+      height: 300,
     },
     preview: false,
-    loading: false,
+    loading: true,
     progress: 0,
     animations: [],
     styles: [],
@@ -690,9 +690,9 @@ class ImageMapEditor extends Component {
     );
     const content = (
       <div className="rde-editor">
-        <ImageMapItems ref={(c) => {
-          this.itemsRef = c;
-        }} canvasRef={this.canvasRef} descriptors={descriptors}/>
+        {/*<ImageMapItems ref={(c) => {*/}
+        {/*  this.itemsRef = c;*/}
+        {/*}} canvasRef={this.canvasRef} descriptors={descriptors}/>*/}
         <div className="rde-editor-canvas-container">
           <div className="rde-editor-header-toolbar">
             <ImageMapHeaderToolbar canvasRef={this.canvasRef} selectedItem={selectedItem} onSelect={onSelect}/>

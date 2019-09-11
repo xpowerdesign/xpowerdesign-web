@@ -11,11 +11,10 @@ import Icon from '../icon/Icon';
 import Scrollbar from '../common/Scrollbar';
 import CommonButton from '../common/CommonButton';
 import SVGModal from '../common/SVGModal';
-import map from 'lodash/map';
 
 notification.config({
   top: 80,
-  duration: 2,
+  duration: 3,
 });
 
 class ImageMapItems extends Component {
