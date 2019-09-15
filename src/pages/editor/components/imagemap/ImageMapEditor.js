@@ -704,9 +704,9 @@ class ImageMapEditor extends Component {
     );
     const content = (
       <div className="rde-editor">
-        {/*<ImageMapItems ref={(c) => {*/}
-        {/*  this.itemsRef = c;*/}
-        {/*}} canvasRef={this.canvasRef} descriptors={descriptors}/>*/}
+        <ImageMapItems ref={(c) => {
+          this.itemsRef = c;
+        }} canvasRef={this.canvasRef} descriptors={descriptors}/>
         <div className="rde-editor-canvas-container">
           <div className="rde-editor-header-toolbar">
             <ImageMapHeaderToolbar canvasRef={this.canvasRef} selectedItem={selectedItem} onSelect={onSelect}/>

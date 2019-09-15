@@ -1,0 +1,62 @@
+.title {
+  margin: 20px 18px 20px 4px;
+  font-family: "noto_sansregular", "Microsoft YaHei", sans-serif;
+  text-align: center;
+  font-size: 14px;
+  text-shadow: 1px 0 0 #000;
+  color: #000;
+  line-height: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.colorBoxWrapper {
+  padding: 0 20px;
+}
+
+.colorItemStyle {
+  width: 34px;
+  height: 34px;
+  float: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin: 0 1px 0 0;
+  font-size: 34px;
+}
+
+.colorWrapper {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  overflow: hidden;
+
+  .colorItem {
+    .colorItemStyle();
+  }
+
+  .defaultTheme {
+    .colorItemStyle();
+    background: #3C3C3C;
+  }
+}
+
+.colorPicker{
+  position: absolute;
+  z-index: 999;
+}
+
+.cover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.colorPresetTitle {
+  line-height: 1.2;
+  font-size: 12px;
+  font-family: HelveticaLight;
+  color: #5a5f69;
+}

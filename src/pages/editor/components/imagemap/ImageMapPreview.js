@@ -6,6 +6,8 @@ import classnames from 'classnames';
 import Icon from '../icon/Icon';
 import Canvas from '../canvas/Canvas';
 
+// @description: 预览页面
+
 class ImageMapPreview extends Component {
   static propTypes = {
     preview: PropTypes.bool,
