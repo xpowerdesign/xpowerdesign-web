@@ -155,15 +155,20 @@ class ImageHandler extends Handler {
    * @description Create filter by type
    * @param {IFilter} filter
    */
+  // 创建图片滤镜
   public createFilter = (filter: IFilter) => {
     const {type: filterType, ...other} = filter;
     const type = filterType.toLowerCase();
+      // 灰度
     if (type === 'grayscale') {
       return new fabric.Image.filters.Grayscale(other);
+      // 使…反转
     } else if (type === 'invert') {
       return new fabric.Image.filters.Invert();
+      // 去除颜色
     } else if (type === 'remove-color') {
       return new fabric.Image.filters.RemoveColor(other);
+      // 深褐色
     } else if (type === 'sepia') {
       return new fabric.Image.filters.Sepia();
     } else if (type === 'brownie') {
@@ -530,7 +535,7 @@ class ImageHandler extends Handler {
   }
 
   /**
-   * @description Apply hue rotation in image
+   * @description Apply hue rotation in image 在图像中应用色调旋转
    * @param {boolean} [hue=false]
    * @param {HueRotationFilter} [value]
    * @param {fabric.Image} [imageObj]
@@ -542,7 +547,7 @@ class ImageHandler extends Handler {
   }
 
   /**
-   * @description Apply resize in image
+   * @description Apply resize in image 在图像中应用调整大小
    * @param {boolean} [resize=false]
    * @param {ResizeFilter} [value]
    * @param {fabric.Image} [imageObj]
@@ -552,7 +557,7 @@ class ImageHandler extends Handler {
   }
 
   /**
-   * @description Apply tint in image
+   * @description Apply tint in image 在图像中应用着色
    * @param {boolean} [tint=false]
    * @param {TintFilter} [value]
    * @param {fabric.Image} [imageObj]
@@ -562,7 +567,7 @@ class ImageHandler extends Handler {
   }
 
   /**
-   * @description Apply mask in image
+   * @description Apply mask in image 在图像中应用蒙版
    * @param {boolean} [mask=false]
    * @param {MaskFilter} [value]
    * @param {fabric.Image} [imageObj]
@@ -572,7 +577,7 @@ class ImageHandler extends Handler {
   }
 
   /**
-   * @description Apply multiply in image
+   * @description Apply multiply in image 在图像中应用正片叠底
    * @param {boolean} [multiply=false]
    * @param {MultiplyFilter} [value]
    * @param {fabric.Image} [imageObj]

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {ResizeSensor} from 'css-element-queries';
-import {Badge, Button, Popconfirm, Menu} from 'antd';
+import {Badge, Button, Popconfirm, Menu, Icon, Layout} from 'antd';
 import debounce from 'lodash/debounce';
 
-import { formatMessage } from 'umi-plugin-react/locale';
+import {formatMessage} from 'umi-plugin-react/locale';
 
 import Canvas from '../canvas/Canvas';
 import ImageMapFooterToolbar from './ImageMapFooterToolbar';
@@ -14,6 +14,11 @@ import ImageMapItems from './ImageMapItems';
 // 顶部工具页：需要重构为根据选择的元素动态变化: ImageMapTitle 与 ImageHeaderToolbar 一起合并
 import ImageMapTitle from './ImageMapTitle';
 import ImageMapHeaderToolbar from './ImageMapHeaderToolbar';
+
+const {Sider} = Layout;
+import BackgroundComponent from '../assets/BackgroundComponent';
+
+import imageEditorStyles from './ImageMapEditor.less'
 
 // 预览页面：重构为查看全屏页面
 import ImageMapPreview from './ImageMapPreview';
@@ -202,7 +207,7 @@ class ImageMapEditor extends Component {
       const changedKey = Object.keys(changedValues)[0];
       const changedValue = changedValues[changedKey];
       if (allValues.workarea) {
-        this.canvasHandlers.onChangeWokarea(changedKey, changedValue, allValues.workarea);
+        this.canvasHandlers.onChangeWorkArea(changedKey, changedValue, allValues.workarea);
         return;
       }
       if (changedKey === 'width' || changedKey === 'height') {
@@ -324,7 +329,7 @@ class ImageMapEditor extends Component {
       }
       this.canvasRef.handlers.set(changedKey, changedValue);
     },
-    onChangeWokarea: (changedKey, changedValue, allValues) => {
+    onChangeWorkArea: (changedKey, changedValue, allValues) => {
       if (changedKey === 'layout') {
         this.canvasRef.workareaHandlers.setLayout(changedValue);
         return;
@@ -531,9 +536,9 @@ class ImageMapEditor extends Component {
     onDownload: () => {
       this.showLoading(true);
       const objects = this.canvasRef.handlers.exportJSON().objects.filter((obj) => {
-        if (!obj.id) {
+        // filter the workArea image
+        if (!obj.id || obj.id === 'workarea')
           return false;
-        }
         return true;
       });
       const {animations, styles, dataSources} = this.state;
@@ -704,9 +709,39 @@ class ImageMapEditor extends Component {
     );
     const content = (
       <div className="rde-editor">
-        <ImageMapItems ref={(c) => {
-          this.itemsRef = c;
-        }} canvasRef={this.canvasRef} descriptors={descriptors}/>
+        <Sider className={imageEditorStyles.leftSider} width={100} style={{background: '#fff'}}>
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={['background']}
+            style={{height: '100%', borderRight: 0}}
+          >
+            <Menu.Item key="background">
+              <Icon type="mail"/>
+              {formatMessage({id: "menu.background"})}
+            </Menu.Item>
+            <Menu.Item key="sticker">
+              <Icon type="sketch"/>
+              {formatMessage({id: "menu.sticker"})}
+            </Menu.Item>
+            <Menu.Item key="text">
+              <Icon type="file-word"/>
+              {formatMessage({id: "menu.text"})}
+            </Menu.Item>
+            <Menu.Item key="photo">
+              <Icon type="ant-cloud"/>
+              {formatMessage({id: "menu.photo"})}
+            </Menu.Item>
+          </Menu>
+        </Sider>
+
+        <Sider width={356} style={{background: '#f0f2f5'}}>
+          <BackgroundComponent canvasRef={this.canvasRef}/>
+        </Sider>
+
+        {/*<ImageMapItems ref={(c) => {*/}
+        {/*  this.itemsRef = c;*/}
+        {/*}} canvasRef={this.canvasRef} descriptors={descriptors}/>*/}
         <div className="rde-editor-canvas-container">
           <div className="rde-editor-header-toolbar">
             <ImageMapHeaderToolbar canvasRef={this.canvasRef} selectedItem={selectedItem} onSelect={onSelect}/>
@@ -724,7 +759,7 @@ class ImageMapEditor extends Component {
               canvasOption={{
                 width: canvasRect.width,
                 height: canvasRect.height,
-                backgroundColor: '#f3f3f3',
+                backgroundColor: '#dcdcdc',
                 selection: true,
               }}
               minZoom={30}
@@ -745,17 +780,17 @@ class ImageMapEditor extends Component {
                                    zoomRatio={zoomRatio}/>
           </div>
         </div>
-        <ImageMapConfigurations
-          canvasRef={this.canvasRef}
-          onChange={onChange}
-          selectedItem={selectedItem}
-          onChangeAnimations={onChangeAnimations}
-          onChangeStyles={onChangeStyles}
-          onChangeDataSources={onChangeDataSources}
-          animations={animations}
-          styles={styles}
-          dataSources={dataSources}
-        />
+        {/*<ImageMapConfigurations*/}
+        {/*  canvasRef={this.canvasRef}*/}
+        {/*  onChange={onChange}*/}
+        {/*  selectedItem={selectedItem}*/}
+        {/*  onChangeAnimations={onChangeAnimations}*/}
+        {/*  onChangeStyles={onChangeStyles}*/}
+        {/*  onChangeDataSources={onChangeDataSources}*/}
+        {/*  animations={animations}*/}
+        {/*  styles={styles}*/}
+        {/*  dataSources={dataSources}*/}
+        {/*/>*/}
         <ImageMapPreview ref={(c) => {
           this.preview = c;
         }} preview={preview} onChangePreview={onChangePreview} onTooltip={onTooltip} onLink={onLink}/>

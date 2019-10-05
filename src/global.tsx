@@ -81,3 +81,6 @@ if (pwa) {
     });
   }
 }
+
+// global elements
+window.isNode = new Function("try {return this===global && isNodeEnv;}catch(e){return false;}")()

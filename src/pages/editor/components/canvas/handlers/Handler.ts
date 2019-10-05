@@ -1,3 +1,5 @@
+import {fabric} from "fabric";
+
 export interface HandlerOptions {
   canvas: fabric.Canvas;
 }

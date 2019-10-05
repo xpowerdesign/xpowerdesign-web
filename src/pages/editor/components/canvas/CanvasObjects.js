@@ -1,6 +1,9 @@
 import {fabric} from 'fabric';
 
-import Arrow from './Arrow';
+import Arrow from './partials/Arrow';
+import DrawObject from './partials/DrawObject';
+import ShapeImage from './partials/ShapeImage';
+import BackgroundShapeImage from './partials/BackgroundShapeImage';
 
 export default (mergedObjects, defaultOptions) => {
   const fabricObjects = {
@@ -75,6 +78,24 @@ export default (mergedObjects, defaultOptions) => {
         points,
       }),
     },
+    'draw-object': {
+      create: ({points, ...option}) => new DrawObject(points, {
+        ...defaultOptions,
+        ...option,
+      }),
+    },
+    'shape-image': {
+      create: ({callback, ...option}) => new ShapeImage({
+        ...defaultOptions,
+        ...option,
+      }, callback),
+    },
+    'background-shape-image': {
+      create: ({callback, ...option}) => new BackgroundShapeImage({
+        ...defaultOptions,
+        ...option,
+      }, callback),
+    }
   };
   if (mergedObjects) {
     Object.assign(fabricObjects, mergedObjects);

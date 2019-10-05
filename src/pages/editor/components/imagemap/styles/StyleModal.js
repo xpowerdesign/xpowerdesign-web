@@ -108,7 +108,7 @@ class StyleModal extends Component {
             }}
             editable={false}
             canvasOption={{width, height, backgroundColor: '#f3f3f3'}}
-            workareaOption={{backgroundColor: 'transparent'}}
+            workAreaOption={{backgroundColor: 'transparent'}}
           />
         </div>
       </Modal>

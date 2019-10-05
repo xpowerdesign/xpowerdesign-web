@@ -58,8 +58,8 @@ export default {
 
   "editor.action.selection": "选择模式(Q)",
   "editor.action.grab": "Grab mode(W)",
-  "editor.action.zoom-in": "缩小",
-  "editor.action.zoom-out": "放大",
+  "editor.action.zoom-in": "放大",
+  "editor.action.zoom-out": "缩小",
   "editor.action.one-to-one": "1:1",
   "editor.action.fit": "全屏",
   "editor.action.preview": "预览",

@@ -9,39 +9,43 @@ import interact from 'interactjs';
 import CanvasObjects from './CanvasObjects';
 import OrthogonalLink from '../workflow/link/OrthogonalLink';
 import CurvedLink from '../workflow/link/CurvedLink';
-import Arrow from './Arrow';
+import Arrow from './partials/Arrow';
+
 import {ImageHandler} from './handlers';
 
 import '../../../../../public/styles/core/tooltip.less'
 import '../../../../../public/styles/core/contextmenu.less'
 import anime from "animejs";
 
+import "./utils/objectUtils"
 
+// 默认canvas属性
 const defaultCanvasOption = {
-  preserveObjectStacking: true,
-  width: 300,
-  height: 150,
-  selection: true,
-  defaultCursor: 'default',
-  backgroundColor: '#fff',
+  preserveObjectStacking: true,  // 保护对象叠加
+  width: 300,                    // 宽度
+  height: 150,                   // 高度
+  selection: true,               // 选择模式
+  defaultCursor: 'default',      // 默认光标
+  backgroundColor: '#fff',       // 背景
 };
 
-const defaultWorkareaOption = {
-  width: 600,
-  height: 400,
-  workareaWidth: 600,
-  workareaHeight: 400,
-  lockScalingX: true,
-  lockScalingY: true,
-  scaleX: 1,
-  scaleY: 1,
-  backgroundColor: '#fff',
-  hasBorders: false,
-  hasControls: false,
-  selectable: false,
-  lockMovementX: true,
+// 工作区间（中间区域）
+const defaultWorkAreaOption = {
+  width: 600,  // canvas width
+  height: 400,  // canvas height
+  workareaWidth: 600,  // 工作区域宽
+  workareaHeight: 400, // 工作区域高
+  lockScalingX: true,  // 锁住缩放X
+  lockScalingY: true,  // 锁住缩放Y
+  scaleX: 1,  // 缩放X轴比例 1
+  scaleY: 1,  // 缩放Y轴比例 1
+  backgroundColor: '#fff',  // 背景图
+  hasBorders: false, // 是否有边框
+  hasControls: false, // 是否有控制
+  selectable: false,  // 是否有选择
+  lockMovementX: true, //
   lockMovementY: true,
-  hoverCursor: 'default',
+  hoverCursor: 'default', // 悬空图标
   name: '',
   id: 'workarea',
   type: 'image',
@@ -50,9 +54,10 @@ const defaultWorkareaOption = {
   tooltip: {
     enabled: false,
   },
-  isElement: false,
+  isElement: false,  // 是否有元素
 };
 
+// 默认键盘事件
 const defaultKeyboardEvent = {
   move: true,
   all: true,
@@ -68,7 +73,7 @@ class Canvas extends Component {
   static propsTypes = {
     fabricObjects: PropTypes.object,
     editable: PropTypes.bool,
-    canvasOption: PropTypes.object,
+    canvasOption: PropTypes.object,  // canvas options 宽度、高度、背景等
     defaultOptions: PropTypes.object,
     activeSelection: PropTypes.object,
     tooltip: PropTypes.any,
@@ -77,7 +82,7 @@ class Canvas extends Component {
     maxZoom: PropTypes.number,
     propertiesToInclude: PropTypes.array,
     guidelineOption: PropTypes.obj,
-    workareaOption: PropTypes.obj,
+    workAreaOption: PropTypes.obj,
     gridOption: PropTypes.obj,
     onModified: PropTypes.func,
     onAdd: PropTypes.func,
@@ -88,7 +93,7 @@ class Canvas extends Component {
     onLink: PropTypes.func,
     onDblClick: PropTypes.func,
     keyEvent: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     editable: true,
@@ -104,7 +109,7 @@ class Canvas extends Component {
     minZoom: 0,
     maxZoom: 300,
     propertiesToInclude: [],
-    workareaOption: {},
+    workAreaOption: {},
     gridOption: {
       enabled: false,
       grid: 10,
@@ -114,45 +119,68 @@ class Canvas extends Component {
       enabled: true,
     },
     keyEvent: {},
-  }
+  };
 
   constructor(props) {
     super(props);
+    // fabricObjects 包含元素element，自定义以及fabric
     this.fabricObjects = CanvasObjects(props.fabricObjects, props.defaultOptions);
+    // 引用（Refs）提供了一个获得DOM节点或者创建在render方法中的React元素的方法；
     this.container = React.createRef();
     this.objects = [];
+    // canvas键盘事件
     this.keyEvent = Object.assign({}, defaultKeyboardEvent, props.keyEvent);
   }
 
   state = {
     id: uuid(),
-    clipboard: null,
-  }
+    clipboard: null, // 剪贴板
+  };
 
   componentDidMount() {
     const {id} = this.state;
     const {editable, canvasOption, guidelineOption} = this.props;
     const mergedCanvasOption = Object.assign({}, defaultCanvasOption, canvasOption);
+
+    // 初始化canvas
     this.canvas = new fabric.Canvas(`canvas_${id}`, mergedCanvasOption);
+    // 定义imageHandler 为New ImageHandler
     this.imageHandler = new ImageHandler({
       canvas: this.canvas,
     });
+    // 设置canvas背景
     this.canvas.setBackgroundColor(mergedCanvasOption.backgroundColor, this.canvas.renderAll.bind(this.canvas));
+    // 初始化工作区域
     this.workareaHandlers.init();
+    // 加载canvas元素
     this.canvas.renderAll();
+    // 加载网格 ？？ 不知道做什么的？
     this.gridHandlers.init();
-    const {modified, moving, moved, scaling, rotating, mousewheel, mousedown, mousemove, mouseup, mouseout, selection, beforeRender, afterRender} = this.eventHandlers;
+
+    // 定义事件
+    const {
+      modified, moving, moved, scaling, rotating, mousewheel,
+      mousedown, mousemove, mouseup, mouseout, selection,
+      beforeRender, afterRender} = this.eventHandlers;
+
+    // 如果是可编辑状态
     if (editable) {
+      // Redo undo 交易事件
       this.transactionHandlers.init();
+      // 选择模式
       this.interactionMode = 'selection';
       this.panning = false;
+      // 标示线
       if (guidelineOption.enabled) {
         this.guidelineHandlers.init();
       }
+
       this.contextmenuRef = document.createElement('div');
       this.contextmenuRef.id = `${id}_contextmenu`;
       this.contextmenuRef.className = 'rde-contextmenu contextmenu-hidden';
       document.body.appendChild(this.contextmenuRef);
+
+      // canvas监听事件
       this.canvas.on({
         'object:modified': modified,
         'object:scaling': scaling,
@@ -170,10 +198,12 @@ class Canvas extends Component {
         'after:render': guidelineOption.enabled ? afterRender : null,
       });
     } else {
+      // 只加载tooltips
       this.tooltipRef = document.createElement('div');
       this.tooltipRef.id = `${id}_tooltip`;
       this.tooltipRef.className = 'rde-tooltip tooltip-hidden';
       document.body.appendChild(this.tooltipRef);
+      // 只监听鼠标事件
       this.canvas.on({
         'mouse:down': mousedown,
         'mouse:move': mousemove,
@@ -185,6 +215,7 @@ class Canvas extends Component {
     this.attachEventListener();
   }
 
+  // 出发setState事件
   componentDidUpdate(prevProps) {
     if (JSON.stringify(this.props.canvasOption) !== JSON.stringify(prevProps.canvasOption)) {
       const {canvasOption: {width: currentWidth, height: currentHeight}} = this.props;
@@ -204,9 +235,9 @@ class Canvas extends Component {
     }
     if (JSON.stringify(this.props.fabricObjects) !== JSON.stringify(prevProps.fabricObjects)) {
       this.fabricObjects = CanvasObjects(this.props.fabricObjects);
-    } else if (JSON.stringify(this.props.workareaOption) !== JSON.stringify(prevProps.workareaOption)) {
+    } else if (JSON.stringify(this.props.workAreaOption) !== JSON.stringify(prevProps.workAreaOption)) {
       this.workarea.set({
-        ...this.props.workareaOption,
+        ...this.props.workAreaOption,
       });
     } else if (JSON.stringify(this.props.guidelineOption) !== JSON.stringify(prevProps.guidelineOption)) {
       if (this.props.guidelineOption.enabled) {
@@ -275,7 +306,7 @@ class Canvas extends Component {
     if (this.keyEvent.clipboard) {
       document.addEventListener('paste', this.eventHandlers.paste, false);
     }
-  }
+  };
 
   detachEventListener = () => {
     document.removeEventListener('keydown', this.eventHandlers.keydown);
@@ -285,7 +316,7 @@ class Canvas extends Component {
     if (this.keyEvent.clipboard) {
       document.removeEventListener('paste', this.eventHandlers.paste);
     }
-  }
+  };
 
   /* eslint-disable react/sort-comp, react/prop-types */
   handlers = {
@@ -307,7 +338,13 @@ class Canvas extends Component {
       }
     },
     add: (obj, centered = true, loaded = false) => {
-      const {editable} = this.props;
+      let {editable} = this.props;
+
+      // TODO: this is override editable
+      // if(obj.hasOwnProperty('editable')) {
+      //   editable = obj.editable;
+      // }
+
       const option = {
         hasControls: editable,
         hasBorders: editable,
@@ -321,6 +358,7 @@ class Canvas extends Component {
       } else {
         option.editable = editable;
       }
+
       if (editable && this.workarea.layout === 'fullscreen') {
         option.scaleX = this.workarea.scaleX;
         option.scaleY = this.workarea.scaleY;
@@ -377,6 +415,7 @@ class Canvas extends Component {
       }
       // Create canvas object
       createdObj = this.fabricObjects[obj.type].create(newOption);
+
       if (!editable && !this.handlers.isElementType(obj.type)) {
         createdObj.on('mousedown', this.eventHandlers.object.mousedown);
       }
@@ -1430,6 +1469,7 @@ class Canvas extends Component {
     },
   }
 
+  // TODO: need to refactor 裁剪
   cropHandlers = {
     validType: () => {
       const activeObject = this.canvas.getActiveObject();
@@ -1634,6 +1674,7 @@ class Canvas extends Component {
     },
   }
 
+  // 选择模式
   modeHandlers = {
     selection: (callback) => {
       if (this.interactionMode === 'selection') {
@@ -1728,6 +1769,7 @@ class Canvas extends Component {
     },
   }
 
+  // 动画核心
   animationHandlers = {
     play: (id, hasControls) => {
       const findObject = this.handlers.findById(id);
@@ -1966,104 +2008,106 @@ class Canvas extends Component {
     },
   }
 
-  // videoHandlers = {
-  //   play: () => {
-  //
-  //   },
-  //   pause: () => {
-  //
-  //   },
-  //   stop: () => {
-  //
-  //   },
-  //   create: (obj, src) => {
-  //     const {editable} = this.props;
-  //     const {id, autoplay, muted, loop} = obj;
-  //     const {left, top} = obj.getBoundingRect();
-  //     const videoElement = fabric.util.makeElement('video', {
-  //       id,
-  //       autoplay,
-  //       muted,
-  //       loop,
-  //       preload: 'none',
-  //       controls: false,
-  //     });
-  //     const {scaleX, scaleY, angle} = obj;
-  //     const zoom = this.canvas.getZoom();
-  //     const width = obj.width * scaleX * zoom;
-  //     const height = obj.height * scaleY * zoom;
-  //     const video = fabric.util.wrapElement(videoElement, 'div', {
-  //       id: `${obj.id}_container`,
-  //       style: `transform: rotate(${angle}deg);
-  //                       width: ${width}px;
-  //                       height: ${height}px;
-  //                       left: ${left}px;
-  //                       top: ${top}px;
-  //                       position: absolute;`,
-  //     });
-  //     this.container.current.appendChild(video);
-  //     const player = new MediaElementPlayer(obj.id, {
-  //       pauseOtherPlayers: false,
-  //       videoWidth: '100%',
-  //       videoHeight: '100%',
-  //       success: (mediaeElement, originalNode, instance) => {
-  //         if (editable) {
-  //           instance.pause();
-  //         }
-  //         // https://www.youtube.com/watch?v=bbAQtfoQMp8
-  //         // console.log(mediaeElement, originalNode, instance);
-  //       },
-  //     });
-  //     player.setPlayerSize(width, height);
-  //     player.setSrc(src.src);
-  //     if (editable) {
-  //       this.elementHandlers.draggable(video, obj);
-  //       video.addEventListener('mousedown', (e) => {
-  //         this.canvas.setActiveObject(obj);
-  //         this.canvas.renderAll();
-  //       }, false);
-  //     }
-  //     obj.setCoords();
-  //     obj.set('player', player);
-  //   },
-  //   load: (obj, src) => {
-  //     const {canvas} = this;
-  //     const {editable} = this.props;
-  //     if (editable) {
-  //       this.elementHandlers.removeById(obj.id);
-  //     }
-  //     this.videoHandlers.create(obj, src);
-  //     this.canvas.renderAll();
-  //     fabric.util.requestAnimFrame(function render() {
-  //       canvas.renderAll();
-  //       fabric.util.requestAnimFrame(render);
-  //     });
-  //   },
-  //   set: (obj, src) => {
-  //     let newSrc;
-  //     if (typeof src === 'string') {
-  //       obj.set('file', null);
-  //       obj.set('src', src);
-  //       newSrc = {
-  //         src,
-  //       };
-  //       this.videoHandlers.load(obj, newSrc);
-  //     } else {
-  //       const reader = new FileReader();
-  //       reader.onload = (e) => {
-  //         obj.set('file', src);
-  //         obj.set('src', e.target.result);
-  //         newSrc = {
-  //           src: e.target.result,
-  //           type: src.type,
-  //         };
-  //         this.videoHandlers.load(obj, newSrc);
-  //       };
-  //       reader.readAsDataURL(src);
-  //     }
-  //   },
-  // }
+  // video核心
+  videoHandlers = {
+    play: () => {
 
+    },
+    pause: () => {
+
+    },
+    stop: () => {
+
+    },
+    create: (obj, src) => {
+      const {editable} = this.props;
+      const {id, autoplay, muted, loop} = obj;
+      const {left, top} = obj.getBoundingRect();
+      const videoElement = fabric.util.makeElement('video', {
+        id,
+        autoplay,
+        muted,
+        loop,
+        preload: 'none',
+        controls: false,
+      });
+      const {scaleX, scaleY, angle} = obj;
+      const zoom = this.canvas.getZoom();
+      const width = obj.width * scaleX * zoom;
+      const height = obj.height * scaleY * zoom;
+      const video = fabric.util.wrapElement(videoElement, 'div', {
+        id: `${obj.id}_container`,
+        style: `transform: rotate(${angle}deg);
+                        width: ${width}px;
+                        height: ${height}px;
+                        left: ${left}px;
+                        top: ${top}px;
+                        position: absolute;`,
+      });
+      this.container.current.appendChild(video);
+      const player = new MediaElementPlayer(obj.id, {
+        pauseOtherPlayers: false,
+        videoWidth: '100%',
+        videoHeight: '100%',
+        success: (mediaeElement, originalNode, instance) => {
+          if (editable) {
+            instance.pause();
+          }
+          // https://www.youtube.com/watch?v=bbAQtfoQMp8
+          // console.log(mediaeElement, originalNode, instance);
+        },
+      });
+      player.setPlayerSize(width, height);
+      player.setSrc(src.src);
+      if (editable) {
+        this.elementHandlers.draggable(video, obj);
+        video.addEventListener('mousedown', (e) => {
+          this.canvas.setActiveObject(obj);
+          this.canvas.renderAll();
+        }, false);
+      }
+      obj.setCoords();
+      obj.set('player', player);
+    },
+    load: (obj, src) => {
+      const {canvas} = this;
+      const {editable} = this.props;
+      if (editable) {
+        this.elementHandlers.removeById(obj.id);
+      }
+      this.videoHandlers.create(obj, src);
+      this.canvas.renderAll();
+      fabric.util.requestAnimFrame(function render() {
+        canvas.renderAll();
+        fabric.util.requestAnimFrame(render);
+      });
+    },
+    set: (obj, src) => {
+      let newSrc;
+      if (typeof src === 'string') {
+        obj.set('file', null);
+        obj.set('src', src);
+        newSrc = {
+          src,
+        };
+        this.videoHandlers.load(obj, newSrc);
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          obj.set('file', src);
+          obj.set('src', e.target.result);
+          newSrc = {
+            src: e.target.result,
+            type: src.type,
+          };
+          this.videoHandlers.load(obj, newSrc);
+        };
+        reader.readAsDataURL(src);
+      }
+    },
+  }
+
+  // 元素
   elementHandlers = {
     setById: (id, source) => {
       const findObject = this.handlers.findById(id);
@@ -2276,18 +2320,19 @@ class Canvas extends Component {
     },
   }
 
+  // 工作分区
   workareaHandlers = {
     /**
      * Init workarea
      *
      */
     init: () => {
-      const {workareaOption} = this.props;
-      const mergedWorkareaOption = Object.assign({}, defaultWorkareaOption, workareaOption);
+      const {workAreaOption} = this.props;
+      const mergedworkAreaOption = Object.assign({}, defaultWorkAreaOption, workAreaOption);
       const image = new Image();
-      image.width = mergedWorkareaOption.width;
-      image.height = mergedWorkareaOption.height;
-      this.workarea = new fabric.Image(image, mergedWorkareaOption);
+      image.width = mergedworkAreaOption.width;
+      image.height = mergedworkAreaOption.height;
+      this.workarea = new fabric.Image(image, mergedworkAreaOption);
       this.canvas.add(this.workarea);
       this.objects = this.handlers.getObjects();
       this.canvas.centerObject(this.workarea);
@@ -2400,7 +2445,7 @@ class Canvas extends Component {
       canvas.renderAll();
     },
     /**
-     * Set the responsive image on Workarea
+     * Set the responsive image on workArea
      *
      * @param {string} [src]
      * @param {boolean} [loaded]
@@ -2497,7 +2542,7 @@ class Canvas extends Component {
       reader.readAsDataURL(src);
     },
     /**
-     * Set the image on Workarea
+     * Set the image on workArea
      *
      * @param {string} [src]
      * @param {boolean} [loaded=false]
@@ -2602,6 +2647,7 @@ class Canvas extends Component {
     },
   }
 
+  // 节点
   nodeHandlers = {
     /**
      * Get the node path by target object
@@ -2845,6 +2891,7 @@ class Canvas extends Component {
     },
   }
 
+  // 端口 TODO：should remove
   portHandlers = {
     create: (target) => {
       if (!target.createToPort) {
@@ -2994,6 +3041,7 @@ class Canvas extends Component {
     },
   }
 
+  // 链接
   linkHandlers = {
     init: (target) => {
       if (!target.enabled) {
@@ -3147,6 +3195,7 @@ class Canvas extends Component {
     },
   }
 
+  // 画图
   drawingHandlers = {
     polygon: {
       init: () => {
@@ -3412,6 +3461,13 @@ class Canvas extends Component {
         this.modeHandlers.selection();
       },
     },
+    backgroundShapeImage: {
+      init: () => {
+        this.modeHandlers.drawing(null, 'backgroundShapeImage');
+      },
+      finish: () => {
+      },
+    },
     arrow: {
       init: () => {
         this.modeHandlers.drawing(null, 'arrow');
@@ -3498,6 +3554,7 @@ class Canvas extends Component {
     curve: {},
   }
 
+  // 居中
   alignmentHandlers = {
     left: () => {
       const activeObject = this.canvas.getActiveObject();
@@ -3539,6 +3596,7 @@ class Canvas extends Component {
     },
   }
 
+  // 层级
   zoomHandlers = {
     zoomToPoint: (point, zoom) => {
       const {onZoom, minZoom, maxZoom} = this.props;
@@ -3622,6 +3680,7 @@ class Canvas extends Component {
     },
   }
 
+  // 工具提示
   tooltipHandlers = {
     show: debounce(async (target) => {
       if (target.tooltip && target.tooltip.enabled) {
@@ -3669,6 +3728,7 @@ class Canvas extends Component {
     }, 100),
   }
 
+  //
   contextmenuHandlers = {
     show: debounce(async (e, target) => {
       const {onContext} = this.props;
@@ -3696,6 +3756,7 @@ class Canvas extends Component {
     }, 100),
   }
 
+  // 指引线
   guidelineHandlers = {
     init: () => {
       this.ctx = this.canvas.getSelectionContext();
@@ -3957,6 +4018,7 @@ class Canvas extends Component {
     },
   }
 
+  // ?????? 没看懂
   gridHandlers = {
     init: () => {
       const {gridOption} = this.props;
@@ -4023,6 +4085,7 @@ class Canvas extends Component {
       }
     },
   }
+
 
   eventHandlers = {
     object: {
@@ -4634,6 +4697,7 @@ class Canvas extends Component {
     },
   }
 
+  // 交易
   transactionHandlers = {
     /**
      * Transaction init function
