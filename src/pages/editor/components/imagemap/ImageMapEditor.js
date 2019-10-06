@@ -265,9 +265,18 @@ class ImageMapEditor extends Component {
       }
       if (changedKey === 'shadow') {
         if (allValues.shadow.enabled) {
-          this.canvasRef.handlers.setShadow(changedKey, allValues.shadow);
+          if ('blur' in allValues.shadow) {
+            this.canvasRef.handlers.setShadow(allValues.shadow);
+          } else {
+            this.canvasRef.handlers.setShadow({
+              enabled: true,
+              blur: 15,
+              offsetX: 10,
+              offsetY: 10,
+            });
+          }
         } else {
-          this.canvasRef.handlers.setShadow(changedKey, null);
+          this.canvasRef.handlers.setShadow(null);
         }
         return;
       }

@@ -338,13 +338,7 @@ class Canvas extends Component {
       }
     },
     add: (obj, centered = true, loaded = false) => {
-      let {editable} = this.props;
-
-      // TODO: this is override editable
-      // if(obj.hasOwnProperty('editable')) {
-      //   editable = obj.editable;
-      // }
-
+      const { editable, onAdd, gridOption } = this.props;
       const option = {
         hasControls: editable,
         hasBorders: editable,
@@ -358,64 +352,31 @@ class Canvas extends Component {
       } else {
         option.editable = editable;
       }
-
       if (editable && this.workarea.layout === 'fullscreen') {
         option.scaleX = this.workarea.scaleX;
         option.scaleY = this.workarea.scaleY;
       }
       const newOption = Object.assign({}, option, obj);
-      let createdObj;
-      if (obj.type === 'group') {
-        const objects = this.handlers.addGroup(newOption, centered, loaded);
-        const groupOption = Object.assign({}, newOption, {objects});
-        if (obj.type === 'image') {
-          this.handlers.addImage(newOption, centered, loaded);
-          return;
-        }
-        if (this.handlers.isElementType(obj.type)) {
-          this.handlers.addElement(newOption, centered);
-          return;
-        }
-        if (obj.type === 'svg') {
-          this.handlers.addSVG(newOption, centered, loaded);
-          return;
-        }
-        createdObj = this.fabricObjects[obj.type].create({name: 'New Group', ...groupOption});
-        if (!editable && !this.handlers.isElementType(obj.type)) {
-          createdObj.on('mousedown', this.eventHandlers.object.mousedown);
-        }
-        this.canvas.add(createdObj);
-        this.objects = this.handlers.getObjects();
-        if (obj.type !== 'polygon' && editable && !loaded) {
-          this.handlers.centerObject(createdObj, centered);
-        }
-        if (!editable && createdObj.animation && createdObj.animation.autoplay) {
-          this.animationHandlers.play(createdObj.id);
-        }
-        const {onAdd} = this.props;
-        if (onAdd && editable && !loaded) {
-          onAdd(createdObj);
-        }
-        return createdObj;
-      }
-      if (obj.type === 'image') {
-        this.handlers.addImage(newOption, centered, loaded);
-        return;
-      }
-      if (this.handlers.isElementType(obj.type)) {
-        this.handlers.addElement(newOption, centered, loaded);
-        return;
-      }
-      if (obj.type === 'svg') {
-        this.handlers.addSVG(newOption, centered, loaded);
-        return;
-      }
+      // Individually create canvas object
       if (obj.superType === 'link') {
         return this.linkHandlers.create(newOption);
       }
+      if (obj.type === 'svg') {
+        return this.handlers.addSVG(newOption, centered, loaded);
+      }
+      let createdObj;
       // Create canvas object
-      createdObj = this.fabricObjects[obj.type].create(newOption);
-
+      if (obj.type === 'image') {
+        createdObj = this.handlers.addImage(newOption);
+      } else if (this.handlers.isElementType(obj.type)) {
+        createdObj = this.handlers.addElement(newOption, centered, loaded);
+      } else if (obj.type === 'group') {
+        const objects = this.handlers.addGroup(newOption, centered, loaded);
+        const groupOption = Object.assign({}, newOption, { objects, name: 'New Group' });
+        createdObj = this.fabricObjects[obj.type].create(groupOption);
+      } else {
+        createdObj = this.fabricObjects[obj.type].create(newOption);
+      }
       if (!editable && !this.handlers.isElementType(obj.type)) {
         createdObj.on('mousedown', this.eventHandlers.object.mousedown);
       }
@@ -441,7 +402,6 @@ class Canvas extends Component {
       if (!editable && createdObj.animation && createdObj.animation.autoplay) {
         this.animationHandlers.play(createdObj.id);
       }
-      const {onAdd, gridOption} = this.props;
       if (onAdd && editable && !loaded) {
         onAdd(createdObj);
       }
@@ -463,49 +423,38 @@ class Canvas extends Component {
         return this.handlers.add(child, centered, loaded);
       });
     },
-    addImage: (obj, centered = true, loaded = false) => {
-      const {editable, defaultOptions} = this.props;
+    addImage: (obj) => {
+      const { defaultOptions } = this.props;
       const image = new Image();
-      const {src, file, filters = [], ...otherOption} = obj;
-      const createImage = (img) => {
-        const createdObj = new fabric.Image(img, {
-          src,
-          file,
-          filters: this.imageHandler.createFilters(filters),
-          ...defaultOptions,
-          ...otherOption,
-        });
-        if (!editable) {
-          createdObj.on('mousedown', this.eventHandlers.object.mousedown);
-        }
-        this.canvas.add(createdObj);
-        this.objects = this.handlers.getObjects();
-        if (editable && !loaded) {
-          this.handlers.centerObject(createdObj, centered);
-        }
-        if (!editable && createdObj.animation && createdObj.animation.autoplay) {
-          this.animationHandlers.play(createdObj.id);
-        }
-        const {onAdd} = this.props;
-        if (onAdd && editable && !loaded) {
-          onAdd(createdObj);
-        }
-      };
+      const { src, file, filters = [], ...otherOption } = obj;
+      const createdObj = new fabric.Image(image, {
+        src,
+        file,
+        ...defaultOptions,
+        ...otherOption,
+      });
       if (src) {
         image.onload = () => {
-          createImage(image);
+          createdObj.set({
+            filters: this.imageHandler.createFilters(filters),
+          });
+          this.handlers.setImage(createdObj, src);
         };
         image.src = src;
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        image.onload = () => {
-          createImage(image);
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          image.onload = () => {
+            createdObj.set({
+              filters: this.imageHandler.createFilters(filters),
+            });
+            this.handlers.setImage(createdObj, file);
+          };
+          image.src = e.target.result;
         };
-        image.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      }
+      return createdObj;
     },
     addElement: (obj, centered = true, loaded = false) => {
       const {canvas} = this;
@@ -542,37 +491,41 @@ class Canvas extends Component {
       }
     },
     addSVG: (obj, centered = true, loaded = false) => {
-      const getSVGElements = (object, objects, options) => {
-        const createdObj = fabric.util.groupSVGElements(objects, options);
-        createdObj.set({...this.props.defaultOptions, ...object});
-        this.canvas.add(createdObj);
-        this.objects = this.handlers.getObjects();
-        const {onAdd, editable} = this.props;
-        if (!editable && !this.handlers.isElementType(obj.type)) {
-          createdObj.on('mousedown', this.eventHandlers.object.mousedown);
+      const { defaultOptions } = this.props;
+      return new Promise((resolve) => {
+        const getSVGElements = (object, objects, options) => {
+          const createdObj = fabric.util.groupSVGElements(objects, options);
+          createdObj.set({ ...defaultOptions, ...object });
+          this.canvas.add(createdObj);
+          this.objects = this.handlers.getObjects();
+          const { onAdd, editable } = this.props;
+          if (!editable && !this.handlers.isElementType(obj.type)) {
+            createdObj.on('mousedown', this.eventHandlers.object.mousedown);
+          }
+          if (createdObj.dbclick) {
+            createdObj.on('mousedblclick', this.eventHandlers.object.mousedblclick);
+          }
+          if (editable && !loaded) {
+            this.handlers.centerObject(createdObj, centered);
+          }
+          if (!editable && createdObj.animation && createdObj.animation.autoplay) {
+            this.animationHandlers.play(createdObj.id);
+          }
+          if (onAdd && !loaded && editable) {
+            onAdd(obj);
+          }
+          return createdObj;
+        };
+        if (obj.loadType === 'svg') {
+          fabric.loadSVGFromString(obj.svg, (objects, options) => {
+            resolve(getSVGElements(obj, objects, options));
+          });
+        } else {
+          fabric.loadSVGFromURL(obj.svg, (objects, options) => {
+            resolve(getSVGElements(obj, objects, options));
+          });
         }
-        if (createdObj.dbclick) {
-          createdObj.on('mousedblclick', this.eventHandlers.object.mousedblclick);
-        }
-        if (editable && !loaded) {
-          this.handlers.centerObject(createdObj, centered);
-        }
-        if (!editable && createdObj.animation && createdObj.animation.autoplay) {
-          this.animationHandlers.play(createdObj.id);
-        }
-        if (onAdd && !loaded && editable) {
-          onAdd(obj);
-        }
-      };
-      if (obj.loadType === 'svg') {
-        fabric.loadSVGFromString(obj.svg, (objects, options) => {
-          getSVGElements(obj, objects, options);
-        });
-      } else {
-        fabric.loadSVGFromURL(obj.svg, (objects, options) => {
-          getSVGElements(obj, objects, options);
-        });
-      }
+      });
     },
     /**
      * Remove object
@@ -1036,12 +989,12 @@ class Canvas extends Component {
       this.canvas.renderAll();
       return object;
     },
-    setShadow: (key, value) => {
+    setShadow: (option) => {
       const activeObject = this.canvas.getActiveObject();
       if (!activeObject) {
         return false;
       }
-      activeObject.setShadow(value);
+      activeObject.setShadow(option);
       this.canvas.requestRenderAll();
       const {onModified} = this.props;
       if (onModified) {
@@ -3102,8 +3055,8 @@ class Canvas extends Component {
       const createdObj = this.fabricObjects[link.type].create(fromNode, fromPort, toNode, toPort, {...link});
       this.canvas.add(createdObj);
       this.objects = this.handlers.getObjects();
-      const {onAdd} = this.props;
-      if (onAdd && this.props.editable && init) {
+      const { onAdd, editable } = this.props;
+      if (onAdd && editable && init) {
         onAdd(createdObj);
       }
       this.canvas.renderAll();
